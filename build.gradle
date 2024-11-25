@@ -11,15 +11,34 @@ repositories {
 }
 
 dependencies {
-    //testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.11.3")
     testImplementation 'org.junit.jupiter:junit-jupiter'
-    implementation 'org.junit.jupiter:junit-jupiter-api:5.11.3'
     implementation 'io.qameta.allure:allure-junit5:2.25.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.11.0'
-
+    implementation 'org.seleniumhq.selenium:selenium-java:4.18.1'
+    testImplementation 'org.assertj:assertj-core:3.25.3'
 }
 
 test {
     useJUnitPlatform()
+}
+
+tasks.register('smokeTest', Test) {
+    useJUnitPlatform() {
+        includeTags 'smoke', 'api'
+    }
+}
+
+tasks.register('noDefectsTest', Test) {
+    useJUnitPlatform() {
+        includeTags 'smoke'
+        excludeTags 'defect'
+    }
+}
+
+tasks.register('selenium', Test) {
+    useJUnitPlatform() {
+        includeTags 'selenium'
+    }
 }
