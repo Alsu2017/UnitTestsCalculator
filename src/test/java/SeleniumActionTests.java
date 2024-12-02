@@ -31,8 +31,8 @@ public class SeleniumActionTests {
     }
 
     @AfterEach
-    void close() {
-        driver.close();
+    void quit() {
+        driver.quit();
     }
 
     @Test
@@ -202,39 +202,147 @@ public class SeleniumActionTests {
         String filePath = "src/main/resources/text.txt";
 
         // Чтение содержимого файла в виде строки
-
+        String content = new String(Files.readAllBytes(Paths.get(filePath)));
 
         // Используйте содержимое файла в вашем коде, например, вывод на экран
-
+        System.out.println("Содержимое файла: " + content);
 
         // Получаем URL ресурса
+        URL url = SeleniumActionTests.class.getClassLoader().getResource("text.txt");
 
+        String absolutePath = null;
+        if (url != null) {
             // Получаем абсолютный путь к файлу
-
+            absolutePath = new File(url.getPath()).getAbsolutePath();
+            System.out.println("Абсолютный путь к файлу: " + absolutePath);
+        } else {
+            System.out.println("Ресурс не найден.");
+        }
+        driver.get("https://bonigarcia.dev/selenium-webdriver-java/web-form.html");
+        WebElement fileUpload = driver.findElement(By.name("my-file"));
+        fileUpload.sendKeys(absolutePath);
+        Thread.sleep(5000);
+        WebElement submit = driver.findElement(By.xpath("//button[text()='Submit']"));
+        submit.click();
+        Thread.sleep(5000);
+        assertThat(driver.getCurrentUrl()).contains("text.txt");
     }
 
     @Test
     void actionAPIKeyboardTests() throws InterruptedException {
 
+        WebElement keyboard = driver.findElement(By.name("my-text"));
+        keyboard.click();
+
+        new Actions(driver)
+                .keyDown(Keys.SHIFT).sendKeys("alsu_big_letter ")
+                .keyUp(Keys.SHIFT).sendKeys("alsu_small_letters")
+                .perform();
+        Thread.sleep(2000);
+        Assertions.assertEquals("ALSU_BIG_LETTER alsu_small_letters", keyboard.getAttribute("value"));
+
+        WebElement password = driver.findElement(By.cssSelector("[name='my-password']"));
+//        keyboard.click();
+//        Thread.sleep(2000);
+
+        new Actions(driver)
+                .sendKeys(password, "alsu")
+                .perform();
+        Thread.sleep(2000);
+        Assertions.assertEquals("alsu", password.getAttribute("value"));
     }
 
     @Test
     void actionAPIMouseClickTests() throws InterruptedException {
+        driver.get("https://bonigarcia.dev/selenium-webdriver-java/dropdown-menu.html");
+        driver.manage().window().fullscreen();
+
+        //Клик левой кнопкой
+        WebElement dropdown1 = driver.findElement(By.id("my-dropdown-1"));
+        new Actions(driver)
+                .click(dropdown1)
+                .perform();
+        Thread.sleep(2000);
+
+        //Клик правой кнопкой
+        WebElement dropdown2 = driver.findElement(By.id("my-dropdown-2"));
+        new Actions(driver)
+                .contextClick(dropdown2)
+                .perform();
+        Thread.sleep(2000);
+
+        //Двойной клик
+        WebElement dropdown3 = driver.findElement(By.id("my-dropdown-3"));
+        new Actions(driver)
+                .doubleClick(dropdown3)
+                .perform();
+        Thread.sleep(2000);
 
     }
 
     @Test
     void actionAPIMouseOverTests() throws InterruptedException {
+        driver.get("https://bonigarcia.dev/selenium-webdriver-java/mouse-over.html");
+        driver.manage().window().fullscreen();
 
+        //Провести мышкой поверх текста
+        List<WebElement> images = driver.findElements(By.className("img-fluid"));
+        for (WebElement image : images) {
+            new Actions(driver)
+                    .moveToElement(image)
+                    .perform();
+            Thread.sleep(1000);
+        }
     }
 
     @Test
     void actionAPIDragAndDropTests() throws InterruptedException {
+        driver.get("https://bonigarcia.dev/selenium-webdriver-java/drag-and-drop.html");
+        Thread.sleep(2000);
 
+        WebElement draggable = driver.findElement(By.id("draggable"));
+        WebElement droppable = driver.findElement(By.id("target"));
+        new Actions(driver)
+                .dragAndDrop(draggable, droppable)
+                .perform();
+        Thread.sleep(2000);
     }
 
     @Test
     void actionAPIScrollTests() throws InterruptedException {
+        driver.get("https://bonigarcia.dev/selenium-webdriver-java/long-page.html");
+        Thread.sleep(2000);
 
+        WebElement footerLink = driver.findElement(By.className("text-muted"));
+        new Actions(driver)
+                .scrollToElement(footerLink)
+                .perform();
+        Thread.sleep(2000);
     }
+
+    @Test
+    void navigationTests() throws InterruptedException {
+        driver.get("https://bonigarcia.dev/selenium-webdriver-java/navigation1.html");
+        Thread.sleep(2000);
+
+        WebElement page1 = driver.findElement(By.xpath("//a[@href ='navigation1.html']"));
+        new Actions(driver)
+                .click(page1)
+                .perform();
+        Thread.sleep(1000);
+
+        WebElement page2 = driver.findElement(By.xpath("//a[@href ='navigation2.html']"));
+        new Actions(driver)
+                .click(page2)
+                .perform();
+        Thread.sleep(1000);
+
+        WebElement page3 = driver.findElement(By.xpath("//a[@href ='navigation3.html']"));
+        new Actions(driver)
+                .click(page3)
+                .perform();
+        Thread.sleep(1000);
+    }
+
+
 }
