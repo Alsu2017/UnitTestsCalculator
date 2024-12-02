@@ -111,29 +111,29 @@ public class SeleniumLocatorsTests {
     @Test
     void cssSelectorsTest() throws InterruptedException {
         driver.get("https://bonigarcia.dev/selenium-webdriver-java/web-form.html");
-        WebElement textInputById = driver.findElement(By.cssSelector("#my-check-2"));
+        WebElement textInputById = driver.findElement(By.cssSelector("#my-text-id"));
         textInputById.sendKeys("textInputById");
-        Thread.sleep(2000);
+        Thread.sleep(1000);
 
-        WebElement textInputByClass = driver.findElement(By.cssSelector(".form-check-input"));
+        WebElement textInputByClass = driver.findElement(By.cssSelector(".form-control"));
         textInputByClass.sendKeys("textInputByClass");
-        Thread.sleep(2000);
+        Thread.sleep(1000);
 
-        WebElement textInputByName = driver.findElement(By.cssSelector("[name='my-check']"));
+        WebElement textInputByName = driver.findElement(By.cssSelector("[name='my-text']"));
         textInputByName.sendKeys("textInputByName");
-        Thread.sleep(2000);
+        Thread.sleep(1000);
 
-        WebElement textInputByTagAndClass = driver.findElement(By.cssSelector("input.form-check-input"));
+        WebElement textInputByTagAndClass = driver.findElement(By.cssSelector("input.form-control"));
         textInputByTagAndClass.sendKeys("textInputByTagAndClass");
-        Thread.sleep(2000);
+        Thread.sleep(1000);
 
-        WebElement textInputByTagAndId = driver.findElement(By.cssSelector("input#my-check-2"));
+        WebElement textInputByTagAndId = driver.findElement(By.cssSelector("input#my-text-id"));
         textInputByTagAndId.sendKeys("textInputByTagAndId");
-        Thread.sleep(2000);
+        Thread.sleep(1000);
 
-        WebElement textInputByTagAndAttribute = driver.findElement(By.cssSelector("input[autocomplete='off']"));
+        WebElement textInputByTagAndAttribute = driver.findElement(By.cssSelector("input[myprop='myvalue']"));
         textInputByTagAndAttribute.sendKeys("textInputByTagAndAttribute");
-        Thread.sleep(2000);
+        Thread.sleep(1000);
     }
 
     @Test
